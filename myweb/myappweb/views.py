@@ -28,7 +28,7 @@ def login(request):
         else:
             
             errors = form1.errors
-            return render(request, 'myappweb/login.html', {"form":form, "errors":errors})
+            return render(request, 'myappweb/login.html', {"form": form, "errors": errors})
     else:
         return render(request, 'myappweb/login.html', {"form": form})
 
