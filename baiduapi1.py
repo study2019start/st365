@@ -15,7 +15,7 @@ class BaiduApi(object):
         text = self.client.basicGeneral(image)
         alltext = ""
         for item in text['words_result']:
-            alltext = alltext+''.join(item.get('words',''))
+            alltext = alltext+''.join(item.get('words', ''))+'\n'
         return alltext
 
 

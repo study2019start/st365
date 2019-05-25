@@ -14,9 +14,10 @@ def shibie(filepath):
                 path = os.path.join(dirp, file)
                 print(str(path))
                 if imghdr.what(path):
-                    alltxt = alltxt + baidu.picture(path)+'\n'              
+                    alltxt = alltxt + baidu.picture(path).replace(' ', '')+'\n'              
                     wr = open(pp, "w+")
                     wr.write(alltxt)
+                    wr.close()
 
 
 if __name__ == '__main__': 
