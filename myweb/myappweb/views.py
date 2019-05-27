@@ -3,6 +3,8 @@ from django.contrib import messages
 from django import forms
 from myappweb.models import user
 from django.forms import widgets
+from django.http import HttpResponse
+import json 
 
 
 class UserForm(forms.Form):   # 必须继承forms.Form
@@ -35,4 +37,53 @@ def login(request):
 
 def index(request):
     return render(request, 'myappweb/index.html')
+
+
+def vtable(request):
+    return render(request, 'myappweb/datatable.html')
+
+
+def cdatatable(request):
+    jishu = 0
+    data2 = []
+    for i in range(0, 99):
+        jishu = jishu + 1
+        data = {}
+        data['name'] = 'wyp'
+        data['position'] = str(jishu)+'shanghai'
+        data['salary'] = str(jishu*100)
+        data['start_date'] = '1'
+        data['office'] = 'one-one'
+        data['extn'] = str(jishu*33)
+        data2.append(data)
+        
+    count1 = jishu
+    if request.method == "POST":
+        draw =request.POST.get('draw') if request.POST.get('draw') else 1
+        start =request.POST.get('start') if request.POST.get('start') else 1
+        length =request.POST.get('length') if request.POST.get('length') else 1
+#search_key
+        if(draw):
+            dic = {
+                'draw': draw,
+                'recordsTotal': count1,
+                'recordsFiltered': count1,
+                'data': data2
+            } 
+        else:
+            dic ={'data':data2}
+    
+        return HttpResponse(json.dumps(dic), content_type='application/json')
+    else:
+        dic = {
+            'draw': 1,
+            'recordsTotal': count1,
+            'recordsFiltered': count1,
+            'data': data2
+        } 
+        
+        return HttpResponse(json.dumps(dic), content_type='application/json')
+        
+
+
 # Create your views here.
