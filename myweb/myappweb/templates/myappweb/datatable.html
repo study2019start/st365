@@ -37,7 +37,7 @@ employee.gridInit = {
     lengthChange: true,
     paging: true,
     scrollCollapse: true,
-    serverSide: false,
+    serverSide: true,
     search: true,
     processing: true,
     scrollY: 500,
@@ -67,29 +67,23 @@ employee.status = [
 
 //        {"width": "10%", "targets": [1]},  //设置第2列宽度
 
-//        {
+       {
 
 //            对第7列内容进行替换处理
 
-//            targets: 6,
+           "targets": [6],
 
-//            render: function (data, type, row, meta) {
+           render: function (data, type, row, meta) {
 
-//                if (data == "1") {
+             var node = "<span class='classname1' style='cursor: pointer;' id ="+data+">下载</span>"
 
-//                    return employee.table.sexMan;
+                   return  node ;
 
-//                }
+               
 
-//                if (data == "0") {
+           }
 
-//                    return employee.table.sexWoman;
-
-//                }
-
-//            }
-
-//        },
+       },
 
     {defaultContent: '', targets: ['_all']} //所有列设置默认值为空字符串
 
@@ -128,19 +122,22 @@ eloancn.table = {
 //dataTables方法封装
 
 function dataTablesInit(elo) {
-
+    
     eloancn.table.grid = $('#' + elo.property.tableId).DataTable({
+        
         ajax: {
             url: elo.requestUrl.queryList,
             type: 'POST',
-            data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+            data: { 
+            'args1': '',
+        'csrfmiddlewaretoken': '{{ csrf_token }}' },
             dataType: 'json',
             error: function (jqXHR, textStatus, errorMsg) {
                 alert("请求失败");
             }
         },
         
-    
+        
 
         "searching": elo.gridInit.searching,//搜索框，默认是开启
 
@@ -315,14 +312,21 @@ function search() {
         var filedValue = $(this).attr('data-column');
         if (filedValue != "") {
             console.log($('#col' + filedValue + '_filter').val());
-            oSettings = eloancn.table.grid.column(filedValue).search(
-                    $('#col' + filedValue + '_filter').val()
-            );
+            //oSettings = eloancn.table.grid.column(filedValue).search(
+                   // $('#col' + filedValue + '_filter').val()
+            //);
+            var name= $('#col' + filedValue + '_filter').val();
+            if(name !="")
+            {
+            
+                eloancn.table.grid.settings()[0].ajax.data['args1'] = name
+            eloancn.table.grid.ajax.reload();
+        }
         }
     });
     //搜索的数据一次条件，节省资源
 
-    eloancn.table.grid.draw(oSettings);
+   // eloancn.table.grid.draw(oSettings);
 }
 
 //搜索
@@ -398,8 +402,9 @@ function destroyDataTable(tableId) {
 
 
  $(document).ready(function(){
-       dataTablesInit(employee);
+    var oTable =  dataTablesInit(employee);
  });
+ $(document).on('click','.classname1',function(){alert(this.id)});
 </script>
 </head>
 <div>

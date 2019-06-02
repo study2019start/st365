@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^index/$', views.index, name='index'),
     url(r'^datatable/$', views.vtable, name='vtable'),
     url(r'^gtable$', views.cdatatable, name='cdatatable'),
+    url(r'down/(?P<id>\d+)', views.down, name='down'),
+
 ]
 
 app_name = 'myappweb'

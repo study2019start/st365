@@ -43,6 +43,12 @@ def vtable(request):
     return render(request, 'myappweb/datatable.html')
 
 
+def down(request, id):
+    print(request.GET)
+    return HttpResponse('id = %s' % (id))
+
+
+
 def cdatatable(request):
     jishu = 0
     data2 = []
@@ -58,18 +64,23 @@ def cdatatable(request):
         data2.append(data)
         
     count1 = jishu
+    print(data2[0]['name'])
     if request.method == "POST":
-        draw =request.POST.get('draw') if request.POST.get('draw') else 1
-        start =request.POST.get('start') if request.POST.get('start') else 1
-        length =request.POST.get('length') if request.POST.get('length') else 1
+        draw = request.POST.get('draw') if request.POST.get('draw') else 1
+        start = request.POST.get('start') if request.POST.get('start') else 1
+        length = request.POST.get('length') if request.POST.get('length') else 1
+        search = request.POST.get('args1')
+        order_column1 = request.POST.get('order[0][column]')  # 排序字段索引
+        order_column = request.POST.get('order[0][dir]')
 #search_key
-        if(draw):
+        if draw:
             dic = {
                 'draw': draw,
                 'recordsTotal': count1,
                 'recordsFiltered': count1,
                 'data': data2
             } 
+            print(start)
         else:
             dic ={'data':data2}
     
