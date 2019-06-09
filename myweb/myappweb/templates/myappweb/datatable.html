@@ -22,8 +22,6 @@ employee.property = {
     prompt: "提示",
     pleaseConfirm: "请确认！",
     wantToDelete: "您确定要删除吗?",
-    sexMan: "男",
-    sexWoman: "女",
     isTest: "是",
     noTest: "否",
     banned: "禁用",
@@ -75,8 +73,8 @@ employee.status = [
 
            render: function (data, type, row, meta) {
 
-             var node = "<span class='classname1' style='cursor: pointer;' id ="+data+">下载</span>"
-
+             //var node = "<span class='classname1' style='cursor: pointer;' id ="+data+">下载</span>"
+             var node = "<a  href="+data+"  target='_blank'>下载</a>"   
                    return  node ;
 
                
@@ -404,7 +402,7 @@ function destroyDataTable(tableId) {
  $(document).ready(function(){
     var oTable =  dataTablesInit(employee);
  });
- $(document).on('click','.classname1',function(){alert(this.id)});
+ //$(document).on('click','.classname1',function(){alert(this.id)});
 </script>
 </head>
 <div>

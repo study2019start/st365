@@ -5,6 +5,7 @@ from myappweb.models import user
 from django.forms import widgets
 from django.http import HttpResponse
 import json 
+import os
 
 
 class UserForm(forms.Form):   # 必须继承forms.Form
@@ -60,11 +61,11 @@ def cdatatable(request):
         data['salary'] = str(jishu*100)
         data['start_date'] = '1'
         data['office'] = 'one-one'
-        data['extn'] = str(jishu*33)
+        data['extn'] = '/meida/cjdj/2.docx'
         data2.append(data)
         
     count1 = jishu
-    print(data2[0]['name'])
+
     if request.method == "POST":
         draw = request.POST.get('draw') if request.POST.get('draw') else 1
         start = request.POST.get('start') if request.POST.get('start') else 1
@@ -73,6 +74,7 @@ def cdatatable(request):
         order_column1 = request.POST.get('order[0][column]')  # 排序字段索引
         order_column = request.POST.get('order[0][dir]')
 #search_key
+        print(order_column1)
         if draw:
             dic = {
                 'draw': draw,
