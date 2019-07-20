@@ -55,7 +55,7 @@ def cdatatable(request):
     for i in range(0, 99):
         jishu = jishu + 1
         data = {}
-        data['name'] = 'wyp'
+        data['name'] = 'wyp2312'
         data['position'] = str(jishu)+'shanghai'
         data['salary'] = str(jishu*100)
         data['start_date'] = '1'
