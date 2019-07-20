@@ -5,7 +5,7 @@ from myappweb.models import user
 from django.forms import widgets
 from django.http import HttpResponse
 import json 
-import os
+
 
 
 class UserForm(forms.Form):   # 必须继承forms.Form
@@ -49,7 +49,6 @@ def down(request, id):
     return HttpResponse('id = %s' % (id))
 
 
-
 def cdatatable(request):
     jishu = 0
     data2 = []
@@ -71,10 +70,11 @@ def cdatatable(request):
         start = request.POST.get('start') if request.POST.get('start') else 1
         length = request.POST.get('length') if request.POST.get('length') else 1
         search = request.POST.get('args1')
+        search2 = request.POST.get('args2')
         order_column1 = request.POST.get('order[0][column]')  # 排序字段索引
         order_column = request.POST.get('order[0][dir]')
 #search_key
-        print(order_column1)
+        print(search+","+search2)
         if draw:
             dic = {
                 'draw': draw,
@@ -84,7 +84,7 @@ def cdatatable(request):
             } 
             print(start)
         else:
-            dic ={'data':data2}
+            dic = {'data': data2}
     
         return HttpResponse(json.dumps(dic), content_type='application/json')
     else:

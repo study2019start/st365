@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^datatable/$', views.vtable, name='vtable'),
     url(r'^gtable$', views.cdatatable, name='cdatatable'),
     url(r'down/(?P<id>\d+)', views.down, name='down'),
-    url(r'^meida/(?P<path>.*)$', serve, {'document_root' : settings.MEDIA_ROOT}),
+    url(r'^meida/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
 
 app_name = 'myappweb'

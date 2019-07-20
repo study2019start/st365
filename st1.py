@@ -1,17 +1,15 @@
 import time
-import sys
 import keyboard
 from PIL import ImageGrab
 from baiduapi1 import BaiduApi
 
 
 def screenshot():
-    if keyboard.wait(hotkey='f1') == None:
-        
-            time.sleep(0.01)
+    if keyboard.wait(hotkey='f1') is None:
 
-            im = ImageGrab.grabclipboard()
-            im.save('iamgGrab.png')
+        time.sleep(0.2)
+        im = ImageGrab.grabclipboard()
+        im.save('iamgGrab.png')
 
 
 if __name__ == '__main__': 
