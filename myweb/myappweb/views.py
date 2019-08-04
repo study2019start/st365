@@ -7,7 +7,6 @@ from django.http import HttpResponse
 import json 
 
 
-
 class UserForm(forms.Form):   # 必须继承forms.Form
     name = forms.CharField(label="用户名  ", required=True, error_messages={"required": "不能为空"},
                            widget=widgets.TextInput())
@@ -51,30 +50,35 @@ def down(request, id):
 
 def cdatatable(request):
     jishu = 0
-    data2 = []
-    for i in range(0, 99):
-        jishu = jishu + 1
-        data = {}
-        data['name'] = 'wyp2312'
-        data['position'] = str(jishu)+'shanghai'
-        data['salary'] = str(jishu*100)
-        data['start_date'] = '1'
-        data['office'] = 'one-one'
-        data['extn'] = '/meida/cjdj/2.docx'
-        data2.append(data)
+
         
     count1 = jishu
 
     if request.method == "POST":
-        draw = request.POST.get('draw') if request.POST.get('draw') else 1
+        sts=""
+        draw = request.POST.get('draw') if request.POST.get('draw') else 0
         start = request.POST.get('start') if request.POST.get('start') else 1
-        length = request.POST.get('length') if request.POST.get('length') else 1
-        search = request.POST.get('args1')
-        search2 = request.POST.get('args2')
+        length = request.POST.get('length') if request.POST.get('length') else 10
+        qu = request.POST.get('args1')
+        dis = request.POST.get('args2')
+        lx = request.POST.get('args3')
+        startd = request.POST.get('args4')
+        endd = request.POST.get('args5')
+        mindj = request.POST.get('args6')
+        maxdj = request.POST.get('args7')
         order_column1 = request.POST.get('order[0][column]')  # 排序字段索引
         order_column = request.POST.get('order[0][dir]')
+        searc=dict()
+        if qu:
+            searc['area'] = qu
+        if dis:
+            searc['dizhi']=dis
+        
+        data2 = Cjdj_info.objects.filter(dizhi)
+
+
 #search_key
-        print(search+","+search2)
+        
         if draw:
             dic = {
                 'draw': draw,

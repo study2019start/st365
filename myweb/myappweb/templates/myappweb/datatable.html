@@ -29,7 +29,16 @@
             option:hover{
                 background: #EBCCD1;
             }
-
+            table.dataTable.cell-border tbody th, table.dataTable.cell-border tbody td {
+    border-top: 1px solid black;
+    border-right: 1px solid black; }
+  table.dataTable.cell-border tbody tr th:first-child,
+  table.dataTable.cell-border tbody tr td:first-child {
+    border-left: 1px solid black; }
+  table.dataTable.cell-border tbody tr:first-child th,
+  table.dataTable.cell-border tbody tr:first-child td {
+    border-top: none; }
+     
 </style>
 <script  type="text/javascript">
  var employee = {};
@@ -66,8 +75,8 @@ employee.gridInit = {
     search: true,
     processing: true,
     scrollY: 500,
-    scrollX: "80%",
-    scrollXInner: "80%",
+    scrollX: "100%",
+    scrollXInner: "100%",
     scrollCollapse: true,
     jQueryUI: false,
     autoWidth: true,
@@ -84,7 +93,15 @@ employee.requestUrl = {
 employee.search = {
     uuid: ""
 };
-
+employee.data = { 
+            "args1": "",
+            "args2" : "",
+            "args3" : "",
+            "args4" : "",
+            "args5" : "",
+            "args6" : "",
+            "args7" : "",
+            "csrfmiddlewaretoken": "{{ csrf_token }}" };
 employee.status = [
     {"searchable": false, "orderable": false, "targets": 0},//第一行不进行排序和搜索
 
@@ -96,7 +113,7 @@ employee.status = [
 
 //            对第7列内容进行替换处理
 
-           "targets": [6],
+           "targets": [7],
 
            render: function (data, type, row, meta) {
 
@@ -121,20 +138,19 @@ employee.filed = [
             $(nTd).html("<input type='checkbox' name='checkList' value='" + sData + "'>");
         }
     },
-    {"data": "name"},
-    {"data": "position"},
-    {"data": "salary"},
-    {"data": "start_date"},
-    {"data": "office"},
+    {"data": "dizhi"},
+    {"data": "area"},
+    {"data": "lx"},
+    {"data": "mianji"},
+    {"data": "zongjia"},
+    {"data": "dj"},
+    {"data": "cjdate"},
     {"data": "extn"}
 ];
 
 employee.buttons =
-        '<button class="btn btn-default"  type="button" id="reload" data-toggle="modal" data-target="#employeeModal">刷新表格</button>' +
-        '<button class="btn btn-primary" type="button" id="batchIds" style="margin-left:20px;" data-toggle="modal" >多选</button>' +
-        '<button class="btn btn-primary" type="button" id="selection" style="margin-left:20px;" data-toggle="modal" >单选</button>' +
-        '<button class="btn btn-default" type="button" id="search" style="margin-left:20px;" data-toggle="modal" >查询</button>' +
-        '<button class="btn btn-danger" type="button" id="clearSearch" style="margin-left:20px;" data-toggle="modal" >重置</button>';
+        '<button class="btn btn-default"  type="button" id="reload" style="margin-left:20px;" data-toggle="modal" data-target="#employeeModal">刷新表格</button>' +
+        '<button class="btn btn-primary" type="button" id="batchIds" style="margin-left:20px;" data-toggle="modal" >多选</button>' +'<button class="btn btn-default" type="button" id="search" style="margin-left:20px;" data-toggle="modal" >查询</button>' ;
 
 
 var eloancn = {};
@@ -153,15 +169,7 @@ function dataTablesInit(elo) {
         ajax: {
             url: elo.requestUrl.queryList,
             type: 'POST',
-            data: { 
-            'args1': '',
-            'args2' : '',
-            'args3' : '',
-            'args4' : '',
-            'args5' : '',
-            'args6' : '',
-            'args7' : '',
-        'csrfmiddlewaretoken': '{{ csrf_token }}' },
+            data: elo.data,
             dataType: 'json',
             error: function (jqXHR, textStatus, errorMsg) {
                 alert("请求失败");
@@ -244,15 +252,11 @@ function dataTablesInit(elo) {
                 batchIds();
             });
 
-            $("#selection").click(function () {
-                selection();
-            });
+
             $("#search").click(function () {
                 search();
             });
-            $("#clearSearch").click(function () {
-                clearSearch("form-controlSearch");
-            });
+       
 
 
             //checkbox全选
@@ -308,12 +312,7 @@ function dataTablesInit(elo) {
 
     //自动搜索方法
 
-    $('.form-controlSearch').on('keyup change', function () {
-        elo.gridInit.autoSearch = $("#autoSearch").prop("checked");
-        if (elo.gridInit.autoSearch) {
-            filterColumn($(this).attr('data-column'));
-        }
-    });
+ 
 }
 
 //选中一行 checkbox选中
@@ -338,55 +337,27 @@ function checkbox(tableId) {
 
 function search() {
     var i;
-    var ar1 = $("#col1_filter").val()
-    if(ar1 !="")
-    {
-        eloancn.table.grid.settings()[0].ajax.data['args'+$("#col1_filter").attr('name')] = ar1
-    }
+
     $("[da]").each(function () {
         var filedValue = $(this).attr('da');
         var ss = $('#col' + filedValue + '_filter').val();
-        if (ss!= "") {
-            console.log($('#col' + filedValue + '_filter').val());
+            console.log(ss);
             //oSettings = eloancn.table.grid.column(filedValue).search(
                    // $('#col' + filedValue + '_filter').val()
             //);
             i=filedValue;
-            var valu= ss;
-            if(valu !="")
-            {
+            eloancn.table.grid.settings()[0].ajax.data['args'+filedValue] = ss;
                 
-                eloancn.table.grid.settings()[0].ajax.data['args'+filedValue] = valu
-                
-        }
-        }
+        
+        
     });
     //搜索的数据一次条件，节省资源
-    $("#col3_filter").val(i); 
+   
     eloancn.table.grid.ajax.reload();
    // eloancn.table.grid.draw(oSettings);
 }
 
-//搜索
 
-function filterColumn(i) {
-
-    eloancn.table.grid.column(i).search(
-            $('#col' + i + '_filter').val()
-    ).draw();
-}
-
-//清理搜索数据
-
-function clearSearch(id) {
-
-    $("." + id).each(function () {
-        $(this).val("");
-    });
-    //清空查询条件重新读取数据
-
-    eloancn.table.grid.columns().search("").draw();
-}
 
 //获取所有选中行的UUID
 
@@ -427,6 +398,19 @@ function selection() {
 //重新加载数据
 
 function reload() {
+    $("[da]").each(function () {
+        var filedValue = $(this).attr('da');
+         $('#col' + filedValue + '_filter').val("");
+          
+            //oSettings = eloancn.table.grid.column(filedValue).search(
+                   // $('#col' + filedValue + '_filter').val()
+            //);
+            i=filedValue;
+            eloancn.table.grid.settings()[0].ajax.data['args'+filedValue] = "";
+                
+        
+        
+    });
     eloancn.table.grid.ajax.reload();
 }
 
@@ -446,18 +430,36 @@ function destroyDataTable(tableId) {
 </script>
 </head>
 <div>
-    是否自动检索：<input type="checkbox" id="autoSearch">
-    <br>
-    区：<select  id="col1_filter" name ="1">
+ 
+    区：<select  id="col1_filter" name ="1" da="1">
+            <option value ="all"></option>
         <option value ="黄浦">黄浦</option>
         <option value ="静安">静安</option>
         <option value="徐汇">徐汇</option>
         <option value="虹口">虹口</option>
+        <option value="杨浦">杨浦</option>
+        <option value="青浦">青浦</option>
+        <option value="浦东新">浦东新</option>
+        <option value="闵行">闵行</option>
+        <option value="宝山">宝山</option>
+        <option value="嘉定">嘉定</option>
+        <option value="金山">金山</option>
+        <option value="奉贤">奉贤</option>
+        <option value="崇明">崇明</option>
       </select>
     <br>
     地址：<input type="text" class="form-controlSearch" placeholder="请输入关键字查询" da="2" id="col2_filter">
     <br>
-    类型：<input type="text" class="form-controlSearch" placeholder="请输入关键字查询" da="3" id="col3_filter">
+    类型：<select  id="col3_filter" name ="3" da="3">
+        <option value ="住宅">住宅</option>
+        <option value ="商业">商业</option>
+        <option value="办公">办公</option>
+        <option value="工业">工业</option>
+        <option value="车位">车位</option>
+        <option value="科研">科研</option>
+        <option value="其他">其他</option>
+       
+      </select>
     <br>
     起始日期：<input type="text" class="form-controlSearch" placeholder="请输入关键字查询" da="4" id="col4_filter">
     <br>
@@ -466,16 +468,18 @@ function destroyDataTable(tableId) {
     单价范围：<input type="text" class="form-controlSearch" placeholder="请输入关键字查询" da="6" id="col6_filter">   <input type="text" class="form-controlSearch" placeholder="请输入关键字查询" data-column="7" id="col7_filter">
     <br>
     <hr>
-    <table id="example" class="display">
+    <table id="example" class="display cell-border"  style="width: 100%;"> 
         <thead>
         <tr>
             <th><input type="checkbox" id="employeeCheckAll"></th>
-            <th>姓名</th>
-            <th>地点</th>
-            <th>薪水</th>
-            <th>入职时间</th>
-            <th>办公地点</th>
-            <th>编号</th>
+            <th>地址</th>
+            <th>区</th>
+            <th>类型</th>
+            <th>面积</th>
+            <th>总价</th>
+            <th>单价</th>
+            <th>成交日期</th>
+            <th>下载</th>
         </tr>
         </thead>
     </table>

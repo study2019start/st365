@@ -31,7 +31,7 @@ class Cjdj_info(models.Model):
     mianji = models.FloatField()
     zongjia = models.FloatField()
     dj = models.FloatField()
-    cjdate = models.DateTimeField()
+    cjdate = models.DateField()
     down = models.FileField(upload_to=upload_to)
     area = models.TextField(max_length=500, null=True)
 
