@@ -9,10 +9,11 @@ Desktop.ini
 *.egg-info
 dist
 build
-
+*.png
 # My configurations:
 db.ini
 deploy_key_rsa
-
+/原始文件/
 /ll_env/
 /.vscode/
+.gitignore
