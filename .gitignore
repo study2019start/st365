@@ -17,3 +17,4 @@ deploy_key_rsa
 /ll_env/
 /.vscode/
 .gitignore
+/gonghang/
