@@ -13,13 +13,13 @@ class thred(threading.Thread):
         threading.Thread.__init__(self)
         self.name1=n
         self.li=li
-        self.dbname=dbn
         self.lie=[]
+
     def run(self):
         rs=xunh(self.name1,self.li)
         for i,rs1 in enumerate(rs):
             s= self.read_excel(rs1)
-            self.accessup(s,str(self.li[i]).replace(".xls","").replace(".xlsx",""),self.dbname)
+            self.accessup(s,str(self.li[i]).replace(".xls","").replace(".xlsx",""),rs1)
 
 
     def read_excel(self,filename):

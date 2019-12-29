@@ -5,8 +5,9 @@ import time
 
 class access_model(object):
     def __init__(self,dbname):
-        self.db1 = "Driver={Microsoft Access Driver (*.mdb,*.accdb)};DBQ=E:\\工作\\2019区段地价\\"+str(dbname)
+        self.db1 = "Driver={Microsoft Access Driver (*.mdb,*.accdb)};DBQ="+str(dbname)
         self.re=r'(?P<value>(?=[\x21-\x7e]+)[^A-Za-z0-9])'
+
     def insert(self,wherelist,tablename):
         field = []
         s = ()
@@ -67,7 +68,10 @@ class access_model(object):
                     s1 = s1+(str(k1)+"="+"'"+str(v1)+"'",)
             
             try:
-                st ="update %s  set %s  where %s" % (tablename,','.join(s),' and '.join(s1))
+                if s1:
+                    st = "update %s  set %s  where %s" % (tablename,','.join(s),' and '.join(s1))
+                else:
+                    st = "update %s  set %s " % (tablename,','.join(s))
                 print(st)
                 
                 cur.execute(st)
