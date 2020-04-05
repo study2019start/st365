@@ -78,9 +78,9 @@ def exlcelwrite(a, filename):
 
 def newname(namelist,filename):
     if os.path.exists(filename):
-        lis= os.listdir(filename)
-        for l in lis:
-            if os.path.isdir(os.path.join(filename,l)):
+       
+        for l in namelist:
+            if os.path.isdir(os.path.join(filename,l['old'])):
                 o = os.path.join(filename,l['old'])
                 n = os.path.join(filename,l['newn'])
                 os.rename(o,n)

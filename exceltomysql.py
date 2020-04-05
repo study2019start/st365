@@ -1,5 +1,4 @@
 import xlrd
-
 import asyncio
 import datetime
 import time 
@@ -11,30 +10,31 @@ queueLock = threading.Lock()
 class thred(threading.Thread):
     def __init__(self,n,li,dbn):
         threading.Thread.__init__(self)
-        self.name1=n
-        self.li=li
-        self.lie=[]
-
+        self.name1=n   #
+        self.li=li  #excel表的路径
+        self.lie=[] #数据表的表名
+        self.dbname=dbn #数据库名称
+        
     def run(self):
         rs=xunh(self.name1,self.li)
         for i,rs1 in enumerate(rs):
             s= self.read_excel(rs1)
-            self.accessup(s,str(self.li[i]).replace(".xls","").replace(".xlsx",""),rs1)
+            self.accessup(s,str(self.li[i]).replace(".xls","").replace(".xlsx",""),self.dbname)
 
 
     def read_excel(self,filename):
         dataa = []
         book = xlrd.open_workbook(filename)
-        sheet = book.sheet_by_index(0) #book.sheet_by_name('sheet1')
-        ra = sheet.nrows
-        na= sheet.ncols 
-        for aa in range(0,na):
-            self.lie.append(sheet.cell_value(0,aa))
-        for i in range(1,ra):
+        sheet = book.sheet_by_index(0) #第一个sheet
+        ra = sheet.nrows  #总行数
+        na= sheet.ncols   #总列数
+        for aa in range(0,na): 
+            self.lie.append(sheet.cell_value(0,aa)) #获取第一行数据，数据表的表名
+        for i in range(1,ra):#从第二行开始
             a=[]
-            for s in range(0,na):
+            for s in range(0,na):#从第一列开始
                 v = sheet.cell_value(i,s)
-                a.append(v)
+                a.append(v) #每一行的数据
             dataa.append(a)
         return dataa
 
@@ -42,18 +42,18 @@ class thred(threading.Thread):
         mm=access_model(dbn)
         l1=[]
         l2=[]
-        lis=self.lie[1:len(self.lie)]
-        for ss in s:
+        lis=self.lie[1:len(self.lie)] #数据表的名字除去第一列的列名
+        for ss in s:  #每一行的数据
             dd={}
             id1={}
             for i,l in enumerate(lis):
-                dd[l]=ss[i+1]
-            id1[self.lie[0]]=str(ss[0])
+                dd[l]=ss[i+1]  #列名和数据组成字典 数据从第二列开始
+            id1[self.lie[0]]=str(ss[0])  #第一列的表名和数据组成字典用来查询
             l1.append(dd)
             l2.append(id1)
         #print(l1)
         queueLock.acquire()
-        mm.update(l1,l2,tablename)
+        mm.update(l1,l2,tablename)#l1是更新数据，l2是where中的内容,table表名
         self.lie=[]
         queueLock.release()
 
