@@ -15,26 +15,24 @@ import configparser
 
 
 class base(object):
-    def __init__(self,ur):
-        self.url=ur
+    def __init__(self, ur):
+        self.url = ur
 
-    def logindd(self,no):
+    def logindd(self, no):
         chrome_options = Options()
         __browser_url = r'C:\Users\thl\AppData\Local\Google\Chrome\Application\chrome.exe'
         chrome_options.binary_location = __browser_url
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
-        driver = webdriver.Chrome(options = chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
         driver.maximize_window()
         driver.get(self.url)
 
-        key=no
+        key = no
 
-        self.get_elems(driver,('xpath','//input[@class=\'el-input__inner\']'),0).send_keys(key)#s收入账号
-        if self.get_elem(driver,('xpath','//div[@id=\'tab-newhouse\']'),1000):#等待1000秒完成短信验证
-            self.dr= driver
-           
-           
+        self.get_elems(driver, ('xpath', '//input[@class=\'el-input__inner\']'), 0).send_keys(key) #s收入账号
+        if self.get_elem(driver, ('xpath', '//div[@id=\'tab-newhouse\']'), 1000): #等待1000秒完成短信验证
+            self.dr = driver
             return True
         else:
             return False
@@ -42,17 +40,17 @@ class base(object):
         
 
     def tudisearch(self): #列表[开始时间，结束时间，交易状态，类型，多少页]
-        first=self.get_elem(self.dr,('xpath','//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li[3]') )#一级市场
-        second=self.get_elem(self.dr,('xpath','//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li[4]') )#二级市场
-        count=16
-        listap=[]#存放数据
-        sdd=False
+        first = self.get_elem(self.dr, ('xpath', '//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li[3]') )#一级市场
+        second = self.get_elem(self.dr, ('xpath', '//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li[4]') )#二级市场
+        count = 16
+        listap = []#存放数据
+        sdd = False
         if first:
             print(first.location)
             ActionChains(self.dr).click(first).perform()
             print(second.location)
             time.sleep
-            tudi=self.visibilityy(self.dr,('xpath','//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li/ul/li/span[text()=\'土地\']'))#土地项目点击进入
+            tudi = self.visibilityy(self.dr,('xpath','//ul[@class=\'el-menu-vertical menu-ul-l el-menu\']/li/ul/li/span[text()=\'土地\']'))#土地项目点击进入
 
             if tudi:
                 #print(tudi.loaction)
